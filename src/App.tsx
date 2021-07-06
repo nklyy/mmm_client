@@ -1,14 +1,15 @@
 import React from 'react';
-import './App.css';
 import { Route, Switch } from 'react-router-dom';
 
 import Error from './components/Error/Error';
 import Home from './components/Home/Home';
+import ChooseFrom from './components/ChooseFrom/ChooseFrom';
 
 function App() {
   return (
     <Switch>
-      <Route path={'/'} component={Home} />
+      <Route path={'/cf'} component={ChooseFrom} />
+      <Route path={'/'} component={Home} exact />
 
       <Route component={Error} />
     </Switch>
