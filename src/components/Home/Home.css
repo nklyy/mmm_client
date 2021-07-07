@@ -54,21 +54,3 @@
         font-size: 1rem;
     }
 }
-
-.container {
-    min-height: 100vh;
-    padding: 0 0.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    /*background: linear-gradient(135deg, #111111, #2b2b2b);*/
-    /*background-size: 120%;*/
-    /*-webkit-background-size: cover;*/
-    /*-moz-background-size: cover;*/
-    /*-o-background-size: cover;*/
-}
-
-.lrBtn {
-    margin: 5px 0 0 0;
-}
