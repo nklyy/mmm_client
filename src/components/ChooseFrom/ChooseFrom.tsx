@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import '../../styles/main.css';
 import im from '../../assets/img/hero_everyone@2x.webp';
+import { Link } from 'react-router-dom';
 
 export default function ChooseFrom() {
+  const [disable, setDisable] = useState(true);
+
   return (
     <div className="min-h-screen p-2 flex flex-col justify-center items-center xl:mr-48 xl:ml-48 md:mr-12 md:ml-12">
       <h1 className="font-bold mb-2 sm:text-xs md:text-2xl 2xl:text-4xl">
@@ -33,9 +36,16 @@ export default function ChooseFrom() {
         </button>
       </div>
 
-      <button className="mt-3 border bg-black text-white px-6 py-2 rounded font-medium mx-3 hover:bg-gray-700 transition duration-200 each-in-out">
+      <Link
+        to="/"
+        className={
+          disable
+            ? 'mt-3 border bg-gray-400 text-white px-6 py-2 rounded font-medium mx-3 pointer-events-none'
+            : 'mt-3 border bg-black text-white px-6 py-2 rounded font-medium mx-3 hover:bg-gray-700 transition duration-200 each-in-out'
+        }
+      >
         Next
-      </button>
+      </Link>
     </div>
   );
 }
