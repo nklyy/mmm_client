@@ -32,6 +32,10 @@ export default function ChooseFrom() {
           />
         </button>
       </div>
+
+      <button className="mt-3 border bg-black text-white px-6 py-2 rounded font-medium mx-3 hover:bg-gray-700 transition duration-200 each-in-out">
+        Next
+      </button>
     </div>
   );
 }
