@@ -115,6 +115,8 @@ module.exports = {
       auto: 'auto',
       cover: 'cover',
       contain: 'contain',
+      '100%': '100%',
+      '50%': '50%',
     },
     blur: {
       0: '0',
