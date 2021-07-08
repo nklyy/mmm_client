@@ -5,12 +5,19 @@ import deezer from '../../assets/img/deezerW.png';
 import spotify from '../../assets/img/spotifyTEXT.svg.png';
 
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 export default function ChooseFrom() {
   const [disable, setDisable] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const handleDeezerLoadMusic = (): string => {
+  const handleDeezerLoadMusic = async (): Promise<string> => {
+    const d = await axios.post('http://localhost:4000', {
+      data: '12312',
+      num: 3333,
+    });
+    console.log(d.data);
+
     console.log('Deezer');
     return 'Deezer';
   };
