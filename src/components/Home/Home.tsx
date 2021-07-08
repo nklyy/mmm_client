@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 // import { Link } from 'react-router-dom';
 
 import '../../styles/main.css';
 import './Home.css';
+
 import ChooseFrom from '../ChooseFrom/ChooseFrom';
+import { PageContext } from '../../context/PageContext';
 
 function Home() {
-  const [cf, setSf] = useState(false)
+  const { cf, setCf } = useContext(PageContext);
 
   const handleClick = () => {
-    setSf(true)
-  }
+    setCf(true);
+  };
 
   return (
     <>
@@ -19,7 +21,13 @@ function Home() {
           {/*<Link to={'/cf'}>*/}
           {/*  <button className="btn bt">Let`s start!</button>*/}
           {/*</Link>*/}
-          {cf ? <ChooseFrom/> : <button onClick={handleClick} className="btn bt">Let`s start!</button>}
+          {cf ? (
+            <ChooseFrom />
+          ) : (
+            <button onClick={handleClick} className="btn bt">
+              Let`s start!
+            </button>
+          )}
         </div>
       </div>
     </>
