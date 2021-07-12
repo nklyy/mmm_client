@@ -1,69 +1,35 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 
 import '../../styles/main.css';
-import deezer from '../../assets/img/deezerW.png';
-import spotify from '../../assets/img/spotifyTEXT.svg.png';
 
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import OAuth from '../OAuth/OAuth';
+import { PageContext } from '../../context/PageContext';
+
+const provider = ['deezer', 'spotify'];
 
 export default function ChooseFrom() {
-  const [disable, setDisable] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const { disableNextB, loadingM } = useContext(PageContext);
 
-  const handleDeezerLoadMusic = async (): Promise<string> => {
-    const d = await axios.post('http://localhost:4000', {
-      data: '12312',
-      num: 3333,
-    });
-    console.log(d.data);
-
-    console.log('Deezer');
-    return 'Deezer';
-  };
-
-  const handleSpotifyLoadMusic = (): string => {
-    console.log('Spotify');
-    return 'Spotify';
-  };
+  const buttons = provider.map((pr) => (
+    <OAuth provider={pr} key={pr} moveMusic={false} dzB={false} spB={false} />
+  ));
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="min-h-screen p-2 flex flex-col justify-center items-center">
       <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
-        <div>
-          <button
-            onClick={() => handleDeezerLoadMusic()}
-            // className="border bg-black text-white px-6 py-2 rounded font-medium mx-3 hover:bg-gray-700 transition duration-200 each-in-out"
-            className="w-60 h-28 md:w-80 md:h-40 m-1 bg-black bg-no-repeat bg-origin-content bg-center bg-contain p-2 hover:bg-gray-700 transition duration-200 each-in-out"
-            style={{
-              backgroundImage: `url(${deezer})`,
-              boxShadow: '0 0 10px rgba(0, 0, 0, 0.5)',
-            }}
-          />
-        </div>
-
-        <div className="flex flex-col justify-center items-center">
-          <button
-            onClick={() => handleSpotifyLoadMusic()}
-            // className="bg-black text-white px-6 py-2 rounded font-medium mx-3 hover:bg-gray-700 transition duration-200 each-in-out"
-            className="w-60 h-28 md:w-80 md:h-40 m-1 bg-black bg-no-repeat bg-origin-content bg-center bg-contain p-2 hover:bg-gray-700 transition duration-200 each-in-out"
-            style={{
-              backgroundImage: `url(${spotify})`,
-              boxShadow: '0 0 10px rgba(0, 0, 0, 0.5)',
-            }}
-          />
-        </div>
+        {buttons}
       </div>
 
       <Link
         to="/cw"
         className={
-          disable
+          disableNextB
             ? 'mt-3 border bg-gray-400 text-white px-6 py-2 rounded font-medium mx-3 pointer-events-none text-xs sm:text-xs md:text-xl 2xl:text-3xl'
             : 'mt-3 border bg-black text-white px-6 py-2 rounded font-medium mx-3 hover:bg-gray-700 transition duration-200 each-in-out text-xs sm:text-xs md:text-xl 2xl:text-3xl'
         }
       >
-        {loading ? 'Wait please! We are loading your tracks!' : 'Next'}
+        {loadingM ? 'Wait please! We are loading your tracks!' : 'Next'}
       </Link>
     </div>
   );

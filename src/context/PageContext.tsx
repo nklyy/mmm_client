@@ -3,14 +3,17 @@ import React, { useState, createContext, useMemo } from 'react';
 const PageContext: any = createContext(null);
 
 function PageContextComp(props: { children: any }) {
-  const [cf, setCf] = useState(false);
+  const [disableNextB, setDisableNextB] = useState(true);
+  const [loadingM, setLoadingM] = useState(false);
 
   const value = useMemo(
     () => ({
-      cf,
-      setCf,
+      disableNextB,
+      setDisableNextB,
+      loadingM,
+      setLoadingM,
     }),
-    [cf],
+    [disableNextB, loadingM],
   );
 
   return (
