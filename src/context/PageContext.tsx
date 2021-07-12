@@ -5,6 +5,7 @@ const PageContext: any = createContext(null);
 function PageContextComp(props: { children: any }) {
   const [disableNextB, setDisableNextB] = useState(true);
   const [loadingM, setLoadingM] = useState(false);
+  const [errorAl, setErrorAl] = useState(false);
 
   const value = useMemo(
     () => ({
@@ -12,8 +13,10 @@ function PageContextComp(props: { children: any }) {
       setDisableNextB,
       loadingM,
       setLoadingM,
+      errorAl,
+      setErrorAl,
     }),
-    [disableNextB, loadingM],
+    [disableNextB, errorAl, loadingM],
   );
 
   return (
