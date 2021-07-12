@@ -15,6 +15,7 @@ export default function ChooseFrom() {
     useContext(PageContext);
   const [code, setCode]: any = useState('');
   const [nextStep, setNextStep] = useState(false);
+  const [errMessage, setErrorMessage] = useState('');
 
   const buttons = provider.map((pr) => (
     <OAuth provider={pr} key={pr} moveMusic={false} dzB={false} spB={false} />
@@ -28,15 +29,31 @@ export default function ChooseFrom() {
       window.history.replaceState(null, '', window.location.pathname);
 
       if (code) {
-        try {
-          await axios.post('http://localhost:4000/v1/deezer/checkT', {
-            code,
-          });
+        // try {
+        //   const a = await axios.post('http://localhost:4000/v1/deezer/checkT', {
+        //     code,
+        //   });
+        //   console.log(a);
+        //   setNextStep(true);
+        // } catch (e) {
+        //   // console.log(e);
+        //   setErrorMessage(e);
+        //   setErrorAl(true);
+        // }
 
-          setNextStep(true);
-        } catch (e) {
-          // console.log(e);
+        const { data } = await axios.post(
+          'http://localhost:4000/v1/deezer/checkT',
+          {
+            code,
+          },
+        );
+
+        // console.log(data);
+        if (data.error) {
+          setErrorMessage(data.error);
           setErrorAl(true);
+        } else {
+          setNextStep(true);
         }
       }
     }
@@ -47,6 +64,7 @@ export default function ChooseFrom() {
   return (
     <div>
       <div className="min-h-screen p-2 flex flex-col justify-center items-center">
+        {errorAl ? <ErrorAlert message={errMessage} /> : false}
         <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
           {buttons}
         </div>
@@ -62,7 +80,6 @@ export default function ChooseFrom() {
           {loadingM ? 'Wait please! We are loading your tracks!' : 'Next'}
         </Link>
       </div>
-      {errorAl ? <ErrorAlert /> : false}
     </div>
   );
 }

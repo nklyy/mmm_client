@@ -1,18 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import '../../styles/main.css';
 
-export default function ErrorAlert() {
+export default function ErrorAlert(props: any) {
+  const [close, setClose] = useState(false);
+
+  const handleCloseAlert = () => {
+    setClose(true);
+  };
+
   return (
     <div
-      className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-      role="alert"
+      className="w-60 h-16 p-5 bg-red-500 text-white mb-5 rounded-full"
+      style={close ? { display: 'none' } : { display: 'block' }}
     >
-      <strong className="font-bold">Holy smokes!</strong>
-      <span className="block sm:inline">Something seriously bad happened.</span>
-      <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
-        <h1>123123</h1>
+      <span
+        className="ml-5 text-white font-bold float-right text-base leading-5 cursor-pointer transition duration-300"
+        onClick={() => handleCloseAlert()}
+      >
+        &times;
       </span>
+      {props.message}
     </div>
   );
 }
