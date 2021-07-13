@@ -17,21 +17,29 @@ let music: any;
 export default function ChooseFrom() {
   const { errorAl, setErrorAl, dDeezer, setDDeezer, dSpotify, setDSpotify } =
     useContext(PageContext);
-  const [code, setCode]: any = useState('');
+  const [code, setCode] = useState<any>('');
   const [nextStep, setNextStep] = useState(false);
   const [errMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [type, setType] = useState<any>('');
+
+  useEffect(() => {
+    const param = new URLSearchParams(window.location.search);
+
+    setCode(param.get('code'));
+    setType(param.get('type'));
+  }, []);
 
   useEffect(() => {
     async function check() {
-      const param = new URLSearchParams(window.location.search);
-
-      setCode(param.get('code'));
       window.history.replaceState(null, '', window.location.pathname);
 
       if (code) {
+        console.log(code);
         const { data } = await axios.post(
-          'http://localhost:4000/v1/deezer/checkT',
+          `http://localhost:4000/v1/${
+            type === 's' ? 'spotify' : 'deezer'
+          }/checkT`,
           {
             code,
           },
@@ -59,7 +67,7 @@ export default function ChooseFrom() {
     }
 
     check();
-  });
+  }, [code, setDDeezer, setDSpotify, setErrorAl, type]);
 
   const buttons = provider.map((pr) => (
     <OAuth
