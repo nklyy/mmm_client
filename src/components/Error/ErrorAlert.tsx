@@ -1,26 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import '../../styles/main.css';
+import './Error.css';
 
 export default function ErrorAlert(props: any) {
-  const [close, setClose] = useState(false);
-
-  const handleCloseAlert = () => {
-    setClose(true);
-  };
-
   return (
-    <div
-      className="w-60 h-16 p-5 bg-red-500 text-white mb-5 rounded-full"
-      style={close ? { display: 'none' } : { display: 'block' }}
-    >
-      <span
-        className="ml-5 text-white font-bold float-right text-base leading-5 cursor-pointer transition duration-300"
-        onClick={() => handleCloseAlert()}
+    <div className="alert-banner sm:w-full md:w-auto fixed top-0">
+      <input type="checkbox" className="hidden" id="banneralert" />
+
+      <label
+        className="close cursor-pointer flex items-center justify-between w-full p-4 2xl:p-10 bg-red-500 shadow text-white break-all sm: text-sm md:text-lg lg:text-3xl 2xl:text-6xl"
+        title="close"
+        htmlFor="banneralert"
       >
-        &times;
-      </span>
-      {props.message}
+        {props.message}
+      </label>
     </div>
   );
 }
