@@ -11,7 +11,8 @@ export default function Loader() {
         Loading...
       </h2>
       <p className="w-full p-2 text-center text-white">
-        This may take a few seconds, please dont close this page.
+        This may take a few seconds or minuter it dependent on your number of
+        music, please dont close this page.
       </p>
     </div>
   );
