@@ -1,25 +1,24 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import '../../styles/main.css';
 
-import { Link } from 'react-router-dom';
 import OAuth from '../OAuth/OAuth';
+import ErrorAlert from '../Error/ErrorAlert';
+import Loader from '../Loader/Loader';
+
 import { PageContext } from '../../context/PageContext';
 import axios from 'axios';
-import ErrorAlert from '../Error/ErrorAlert';
 
 const provider = ['deezer', 'spotify'];
 
 export default function ChooseFrom() {
-  const { disableNextB, loadingM, errorAl, setErrorAl } =
+  const { errorAl, setErrorAl, dDeezer, setDDeezer, dSpotify, setDSpotify } =
     useContext(PageContext);
   const [code, setCode]: any = useState('');
   const [nextStep, setNextStep] = useState(false);
   const [errMessage, setErrorMessage] = useState('');
-
-  const buttons = provider.map((pr) => (
-    <OAuth provider={pr} key={pr} moveMusic={false} dzB={false} spB={false} />
-  ));
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function check() {
@@ -29,18 +28,6 @@ export default function ChooseFrom() {
       window.history.replaceState(null, '', window.location.pathname);
 
       if (code) {
-        // try {
-        //   const a = await axios.post('http://localhost:4000/v1/deezer/checkT', {
-        //     code,
-        //   });
-        //   console.log(a);
-        //   setNextStep(true);
-        // } catch (e) {
-        //   // console.log(e);
-        //   setErrorMessage(e);
-        //   setErrorAl(true);
-        // }
-
         const { data } = await axios.post(
           'http://localhost:4000/v1/deezer/checkT',
           {
@@ -48,11 +35,20 @@ export default function ChooseFrom() {
           },
         );
 
-        // console.log(data);
         if (data.error) {
           setErrorMessage(data.error);
           setErrorAl(true);
         } else {
+          setLoading(true);
+          setDDeezer(true);
+          setDSpotify(true);
+
+          const dMusic = await axios.post(
+            'http://localhost:4000/v1/deezer/userMusic',
+            { code },
+          );
+          console.log(dMusic);
+
           setNextStep(true);
         }
       }
@@ -61,24 +57,35 @@ export default function ChooseFrom() {
     check();
   });
 
+  const buttons = provider.map((pr) => (
+    <OAuth
+      provider={pr}
+      key={pr}
+      moveMusic={false}
+      dzB={dDeezer}
+      spB={dSpotify}
+    />
+  ));
+
   return (
     <div>
+      {loading ? <Loader /> : false}
       <div className="min-h-screen p-2 flex flex-col justify-center items-center">
         {errorAl ? <ErrorAlert message={errMessage} /> : false}
         <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
           {buttons}
         </div>
 
-        <Link
-          to="/cw"
-          className={
-            disableNextB
-              ? 'mt-3 border bg-gray-400 text-white px-6 py-2 rounded font-medium mx-3 pointer-events-none text-xs sm:text-xs md:text-xl 2xl:text-3xl'
-              : 'mt-3 border bg-black text-white px-6 py-2 rounded font-medium mx-3 hover:bg-gray-700 transition duration-200 each-in-out text-xs sm:text-xs md:text-xl 2xl:text-3xl'
-          }
-        >
-          {loadingM ? 'Wait please! We are loading your tracks!' : 'Next'}
-        </Link>
+        {/*<Link*/}
+        {/*  to="/cw"*/}
+        {/*  className={*/}
+        {/*    disableNextB*/}
+        {/*      ? 'mt-3 border bg-gray-400 text-white px-6 py-2 rounded font-medium mx-3 pointer-events-none text-xs sm:text-xs md:text-xl 2xl:text-3xl'*/}
+        {/*      : 'mt-3 border bg-black text-white px-6 py-2 rounded font-medium mx-3 hover:bg-gray-700 transition duration-200 each-in-out text-xs sm:text-xs md:text-xl 2xl:text-3xl'*/}
+        {/*  }*/}
+        {/*>*/}
+        {/*  {loadingM ? 'Wait please! We are loading your tracks!' : 'Next'}*/}
+        {/*</Link>*/}
       </div>
     </div>
   );

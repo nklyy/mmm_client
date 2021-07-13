@@ -6,6 +6,8 @@ function PageContextComp(props: { children: any }) {
   const [disableNextB, setDisableNextB] = useState(true);
   const [loadingM, setLoadingM] = useState(false);
   const [errorAl, setErrorAl] = useState(false);
+  const [dDeezer, setDDeezer] = useState(false);
+  const [dSpotify, setDSpotify] = useState(false);
 
   const value = useMemo(
     () => ({
@@ -15,8 +17,12 @@ function PageContextComp(props: { children: any }) {
       setLoadingM,
       errorAl,
       setErrorAl,
+      dDeezer,
+      setDDeezer,
+      dSpotify,
+      setDSpotify,
     }),
-    [disableNextB, errorAl, loadingM],
+    [dDeezer, dSpotify, disableNextB, errorAl, loadingM],
   );
 
   return (

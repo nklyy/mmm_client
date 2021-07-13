@@ -17,7 +17,32 @@ export default function OAuth(props: OAuthIn) {
     window.location.href = `http://localhost:4000/v1/${provider}`;
   };
 
-  return (
-    <AuthButton provider={provider} key={provider} fnc={handleStartAuth} />
-  );
+  switch (provider) {
+    case 'deezer':
+      return (
+        <AuthButton
+          provider={provider}
+          key={provider}
+          fnc={handleStartAuth}
+          disbl={dzB}
+        />
+      );
+    case 'spotify':
+      return (
+        <AuthButton
+          provider={provider}
+          key={provider}
+          fnc={handleStartAuth}
+          disbl={spB}
+        />
+      );
+    default:
+      return (
+        <AuthButton provider={provider} key={provider} fnc={handleStartAuth} />
+      );
+  }
+
+  // return (
+  //   <AuthButton provider={provider} key={provider} fnc={handleStartAuth} />
+  // );
 }
