@@ -35,7 +35,6 @@ export default function ChooseFrom() {
       window.history.replaceState(null, '', window.location.pathname);
 
       if (code) {
-        console.log(code);
         const { data } = await axios.post(
           `http://localhost:4000/v1/${
             type === 's' ? 'spotify' : 'deezer'
@@ -54,12 +53,17 @@ export default function ChooseFrom() {
           setDSpotify(true);
 
           const dMusic = await axios.post(
-            'http://localhost:4000/v1/deezer/userMusic',
+            `http://localhost:4000/v1/${
+              type === 's' ? 'spotify' : 'deezer'
+            }/userMusic`,
             { token: code },
           );
 
           if (dMusic.status === 200) {
             music = dMusic.data;
+            setDDeezer(type === 'd');
+            setDSpotify(type === 's');
+            setLoading(false);
             setNextStep(true);
           }
         }
@@ -81,30 +85,50 @@ export default function ChooseFrom() {
 
   return (
     <>
-      {nextStep ? (
-        <ChooseWhere uM={music} />
-      ) : (
-        <div>
-          {loading ? <Loader /> : false}
-          <div className="min-h-screen p-2 flex flex-col justify-center items-center">
-            {errorAl ? <ErrorAlert message={errMessage} /> : false}
-            <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
-              {buttons}
-            </div>
+      {/*{nextStep ? (*/}
+      {/*  <ChooseWhere uM={music} t={type} code={code} />*/}
+      {/*) : (*/}
+      {/*  <div>*/}
+      {/*    {loading ? <Loader /> : false}*/}
+      {/*    <div className="min-h-screen p-2 flex flex-col justify-center items-center">*/}
+      {/*      {errorAl ? <ErrorAlert message={errMessage} /> : false}*/}
+      {/*      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">*/}
+      {/*        {buttons}*/}
+      {/*      </div>*/}
 
-            {/*<Link*/}
-            {/*  to="/cw"*/}
-            {/*  className={*/}
-            {/*    disableNextB*/}
-            {/*      ? 'mt-3 border bg-gray-400 text-white px-6 py-2 rounded font-medium mx-3 pointer-events-none text-xs sm:text-xs md:text-xl 2xl:text-3xl'*/}
-            {/*      : 'mt-3 border bg-black text-white px-6 py-2 rounded font-medium mx-3 hover:bg-gray-700 transition duration-200 each-in-out text-xs sm:text-xs md:text-xl 2xl:text-3xl'*/}
-            {/*  }*/}
-            {/*>*/}
-            {/*  {loadingM ? 'Wait please! We are loading your tracks!' : 'Next'}*/}
-            {/*</Link>*/}
+      {/*      /!*<Link*!/*/}
+      {/*      /!*  to="/cw"*!/*/}
+      {/*      /!*  className={*!/*/}
+      {/*      /!*    disableNextB*!/*/}
+      {/*      /!*      ? 'mt-3 border bg-gray-400 text-white px-6 py-2 rounded font-medium mx-3 pointer-events-none text-xs sm:text-xs md:text-xl 2xl:text-3xl'*!/*/}
+      {/*      /!*      : 'mt-3 border bg-black text-white px-6 py-2 rounded font-medium mx-3 hover:bg-gray-700 transition duration-200 each-in-out text-xs sm:text-xs md:text-xl 2xl:text-3xl'*!/*/}
+      {/*      /!*  }*!/*/}
+      {/*      /!*>*!/*/}
+      {/*      /!*  {loadingM ? 'Wait please! We are loading your tracks!' : 'Next'}*!/*/}
+      {/*      /!*</Link>*!/*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*)}*/}
+      <div>
+        {loading ? <Loader /> : false}
+        <div className="min-h-screen p-2 flex flex-col justify-center items-center">
+          {errorAl ? <ErrorAlert message={errMessage} /> : false}
+          <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
+            {buttons}
           </div>
+
+          {/*<Link*/}
+          {/*  to="/cw"*/}
+          {/*  className={*/}
+          {/*    disableNextB*/}
+          {/*      ? 'mt-3 border bg-gray-400 text-white px-6 py-2 rounded font-medium mx-3 pointer-events-none text-xs sm:text-xs md:text-xl 2xl:text-3xl'*/}
+          {/*      : 'mt-3 border bg-black text-white px-6 py-2 rounded font-medium mx-3 hover:bg-gray-700 transition duration-200 each-in-out text-xs sm:text-xs md:text-xl 2xl:text-3xl'*/}
+          {/*  }*/}
+          {/*>*/}
+          {/*  {loadingM ? 'Wait please! We are loading your tracks!' : 'Next'}*/}
+          {/*</Link>*/}
         </div>
-      )}
+      </div>
     </>
   );
 }
