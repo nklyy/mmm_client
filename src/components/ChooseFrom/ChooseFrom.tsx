@@ -1,15 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
-// import { Link } from 'react-router-dom';
-
 import '../../styles/main.css';
 
 import OAuth from '../OAuth/OAuth';
 import ErrorAlert from '../Error/ErrorAlert';
 import Loader from '../Loader/Loader';
+import ChooseWhere from '../ChooseWhere/ChooseWhere';
 
 import { PageContext } from '../../context/PageContext';
 import axios from 'axios';
-import ChooseWhere from '../ChooseWhere/ChooseWhere';
 
 const provider = ['deezer', 'spotify'];
 let music: any;
@@ -17,17 +15,22 @@ let music: any;
 export default function ChooseFrom() {
   const { errorAl, setErrorAl, dDeezer, setDDeezer, dSpotify, setDSpotify } =
     useContext(PageContext);
+
   const [code, setCode] = useState<any>('');
   const [nextStep, setNextStep] = useState(false);
   const [errMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [type, setType] = useState<any>('');
+  const [move, setMove] = useState<any>('');
+  const [qi, setQi] = useState<any>('');
 
   useEffect(() => {
     const param = new URLSearchParams(window.location.search);
 
     setCode(param.get('code'));
     setType(param.get('type'));
+    setMove(param.get('m'));
+    setQi(param.get('qi'));
   }, []);
 
   useEffect(() => {
@@ -47,7 +50,9 @@ export default function ChooseFrom() {
         if (data.error) {
           setErrorMessage(data.error);
           setErrorAl(true);
-        } else {
+        }
+
+        if (move === 'f' && qi !== '') {
           setLoading(true);
           setDDeezer(true);
           setDSpotify(true);
@@ -66,12 +71,17 @@ export default function ChooseFrom() {
             setLoading(false);
             setNextStep(true);
           }
+        } else if (move === 't' && qi !== '') {
+          console.log(qi);
+        } else {
+          setErrorMessage('Something wrong! Please try again!');
+          setErrorAl(true);
         }
       }
     }
 
     check();
-  }, [code, setDDeezer, setDSpotify, setErrorAl, type]);
+  }, [code, move, qi, setDDeezer, setDSpotify, setErrorAl, type]);
 
   const buttons = provider.map((pr) => (
     <OAuth
@@ -85,50 +95,19 @@ export default function ChooseFrom() {
 
   return (
     <>
-      {/*{nextStep ? (*/}
-      {/*  <ChooseWhere uM={music} t={type} code={code} />*/}
-      {/*) : (*/}
-      {/*  <div>*/}
-      {/*    {loading ? <Loader /> : false}*/}
-      {/*    <div className="min-h-screen p-2 flex flex-col justify-center items-center">*/}
-      {/*      {errorAl ? <ErrorAlert message={errMessage} /> : false}*/}
-      {/*      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">*/}
-      {/*        {buttons}*/}
-      {/*      </div>*/}
-
-      {/*      /!*<Link*!/*/}
-      {/*      /!*  to="/cw"*!/*/}
-      {/*      /!*  className={*!/*/}
-      {/*      /!*    disableNextB*!/*/}
-      {/*      /!*      ? 'mt-3 border bg-gray-400 text-white px-6 py-2 rounded font-medium mx-3 pointer-events-none text-xs sm:text-xs md:text-xl 2xl:text-3xl'*!/*/}
-      {/*      /!*      : 'mt-3 border bg-black text-white px-6 py-2 rounded font-medium mx-3 hover:bg-gray-700 transition duration-200 each-in-out text-xs sm:text-xs md:text-xl 2xl:text-3xl'*!/*/}
-      {/*      /!*  }*!/*/}
-      {/*      /!*>*!/*/}
-      {/*      /!*  {loadingM ? 'Wait please! We are loading your tracks!' : 'Next'}*!/*/}
-      {/*      /!*</Link>*!/*/}
-      {/*    </div>*/}
-      {/*  </div>*/}
-      {/*)}*/}
-      <div>
-        {loading ? <Loader /> : false}
-        <div className="min-h-screen p-2 flex flex-col justify-center items-center">
-          {errorAl ? <ErrorAlert message={errMessage} /> : false}
-          <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
-            {buttons}
+      {nextStep ? (
+        <ChooseWhere uM={music} t={type} code={code} qi={qi} />
+      ) : (
+        <div>
+          {loading ? <Loader /> : false}
+          <div className="min-h-screen p-2 flex flex-col justify-center items-center">
+            {errorAl ? <ErrorAlert message={errMessage} /> : false}
+            <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
+              {buttons}
+            </div>
           </div>
-
-          {/*<Link*/}
-          {/*  to="/cw"*/}
-          {/*  className={*/}
-          {/*    disableNextB*/}
-          {/*      ? 'mt-3 border bg-gray-400 text-white px-6 py-2 rounded font-medium mx-3 pointer-events-none text-xs sm:text-xs md:text-xl 2xl:text-3xl'*/}
-          {/*      : 'mt-3 border bg-black text-white px-6 py-2 rounded font-medium mx-3 hover:bg-gray-700 transition duration-200 each-in-out text-xs sm:text-xs md:text-xl 2xl:text-3xl'*/}
-          {/*  }*/}
-          {/*>*/}
-          {/*  {loadingM ? 'Wait please! We are loading your tracks!' : 'Next'}*/}
-          {/*</Link>*/}
         </div>
-      </div>
+      )}
     </>
   );
 }

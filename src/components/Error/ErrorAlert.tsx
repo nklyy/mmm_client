@@ -9,7 +9,7 @@ export default function ErrorAlert(props: any) {
       <input type="checkbox" className="hidden" id="banneralert" />
 
       <label
-        className="close cursor-pointer flex items-center justify-between w-full p-4 2xl:p-10 bg-red-500 shadow text-white break-all sm: text-sm md:text-lg lg:text-3xl 2xl:text-6xl"
+        className="close cursor-pointer flex items-center justify-between w-full p-4 2xl:p-5 bg-red-500 shadow text-white break-all sm: text-sm md:text-lg lg:text-3xl 2xl:text-xl"
         title="close"
         htmlFor="banneralert"
       >

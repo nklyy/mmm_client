@@ -1,23 +1,24 @@
 import React from 'react';
 
 import '../../styles/main.css';
-import OAuthMove from '../OAuth/OAuthMove';
+import OAuth from '../OAuth/OAuth';
 
 const provider = ['deezer', 'spotify'];
 
-interface CW {
-  uM: [any];
-  t: string;
-  code: string;
-}
+// interface CW {
+//   uM: [any];
+//   t: string;
+//   code: string;
+//   qi: string;
+// }
 
-export default function ChooseWhere(props: CW) {
+export default function ChooseWhere(props: any) {
   const buttons = provider.map((pr) => (
-    <OAuthMove
+    <OAuth
       provider={pr}
       key={pr}
-      tracks={props.uM}
-      code={props.code}
+      moveMusic={true}
+      qi={props.qi}
       dzB={props.t === 'd'}
       spB={props.t === 's'}
     />
