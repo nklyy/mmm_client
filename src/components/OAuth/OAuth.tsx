@@ -2,6 +2,7 @@ import React from 'react';
 
 import AuthButton from '../Button/AuthButton';
 import { v4 as uuid } from 'uuid';
+import axios from 'axios';
 //
 // interface OAuthIn {
 //   provider: string;
@@ -12,16 +13,16 @@ import { v4 as uuid } from 'uuid';
 // }
 
 export default function OAuth(props: any) {
-  const { provider, moveMusic, dzB, spB, qi } = props;
+  const { provider, moveMusic, dzB, spB, gi } = props;
 
   const handleStartAuth = async () => {
     console.log(provider, moveMusic, dzB, spB);
 
     if (moveMusic) {
-      window.location.href = `http://localhost:4000/v1/${provider}?m=t&questId=${qi}`;
+      window.location.href = `http://localhost:4000/v1/${provider}?m=t&guestID=${gi}`;
     } else {
-      const questId = uuid();
-      window.location.href = `http://localhost:4000/v1/${provider}?m=f&questId=${questId}`;
+      const guestId = uuid();
+      window.location.href = `http://localhost:4000/v1/${provider}?m=f&guestID=${guestId}`;
     }
   };
 

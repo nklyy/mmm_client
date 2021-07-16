@@ -18,7 +18,7 @@ export default function ChooseWhere(props: any) {
       provider={pr}
       key={pr}
       moveMusic={true}
-      qi={props.qi}
+      gi={props.gi}
       dzB={props.t === 'd'}
       spB={props.t === 's'}
     />
