@@ -19,10 +19,10 @@ export default function OAuth(props: any) {
     console.log(provider, moveMusic, dzB, spB);
 
     if (moveMusic) {
-      window.location.href = `http://localhost:4000/v1/${provider}?m=t&guestID=${gi}`;
+      window.location.href = `http://localhost:4000/v1/${provider}?m=t&gi=${gi}`;
     } else {
       const guestId = uuid();
-      window.location.href = `http://localhost:4000/v1/${provider}?m=f&guestID=${guestId}`;
+      window.location.href = `http://localhost:4000/v1/${provider}?m=f&gi=${guestId}`;
     }
   };
 

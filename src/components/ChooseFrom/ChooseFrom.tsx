@@ -16,7 +16,6 @@ export default function ChooseFrom() {
   const { errorAl, setErrorAl, dDeezer, setDDeezer, dSpotify, setDSpotify } =
     useContext(PageContext);
 
-  const [code, setCode] = useState<any>('');
   const [nextStep, setNextStep] = useState(false);
   const [errMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -27,7 +26,6 @@ export default function ChooseFrom() {
   useEffect(() => {
     const param = new URLSearchParams(window.location.search);
 
-    setCode(param.get('code'));
     setType(param.get('type'));
     setMove(param.get('m'));
     setGi(param.get('gi'));
@@ -37,13 +35,13 @@ export default function ChooseFrom() {
     async function check() {
       window.history.replaceState(null, '', window.location.pathname);
 
-      if (code && gi !== '') {
+      if (gi) {
         const { data } = await axios.post(
           `http://localhost:4000/v1/${
             type === 's' ? 'spotify' : 'deezer'
           }/checkT`,
           {
-            code,
+            gi,
           },
         );
 
@@ -52,7 +50,7 @@ export default function ChooseFrom() {
           setErrorAl(true);
         }
 
-        if (move === 'f' && gi !== '') {
+        if (move === 'f' && gi) {
           setLoading(true);
           setDDeezer(true);
           setDSpotify(true);
@@ -61,7 +59,7 @@ export default function ChooseFrom() {
             `http://localhost:4000/v1/${
               type === 's' ? 'spotify' : 'deezer'
             }/userMusic`,
-            { code, gi },
+            { gi },
           );
 
           if (dMusic.status === 200) {
@@ -72,12 +70,12 @@ export default function ChooseFrom() {
             setLoading(false);
             setNextStep(true);
           }
-        } else if (move === 't' && gi !== '') {
+        } else if (move === 't' && gi) {
           const mMusic = await axios.post(
             `http://localhost:4000/v1/${
               type === 's' ? 'spotify/moveToSpotify' : 'deezer'
             }`,
-            { code, gi },
+            { gi },
           );
 
           console.log(mMusic);
@@ -89,7 +87,7 @@ export default function ChooseFrom() {
     }
 
     check();
-  }, [code, move, gi, setDDeezer, setDSpotify, setErrorAl, type]);
+  }, [move, gi, setDDeezer, setDSpotify, setErrorAl, type]);
 
   const buttons = provider.map((pr) => (
     <OAuth
@@ -104,7 +102,7 @@ export default function ChooseFrom() {
   return (
     <>
       {nextStep ? (
-        <ChooseWhere uM={music} t={type} code={code} gi={gi} />
+        <ChooseWhere uM={music} t={type} gi={gi} />
       ) : (
         <div>
           {loading ? <Loader /> : false}
