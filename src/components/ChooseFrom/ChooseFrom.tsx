@@ -71,6 +71,9 @@ export default function ChooseFrom() {
             setNextStep(true);
           }
         } else if (move === 't' && gi) {
+          setLoading(true);
+          setDDeezer(true);
+          setDSpotify(true);
           const mMusic = await axios.post(
             `http://localhost:4000/v1/${
               type === 's' ? 'spotify/moveToSpotify' : 'deezer'
@@ -78,7 +81,10 @@ export default function ChooseFrom() {
             { gi },
           );
 
-          console.log(mMusic);
+          if (mMusic.status === 200) {
+            console.log(mMusic);
+            setLoading(false);
+          }
         } else {
           setErrorMessage('Something wrong! Please try again!');
           setErrorAl(true);
