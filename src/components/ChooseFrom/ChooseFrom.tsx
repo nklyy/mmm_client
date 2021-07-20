@@ -76,7 +76,7 @@ export default function ChooseFrom() {
           setDSpotify(true);
           const mMusic = await axios.post(
             `http://localhost:4000/v1/${
-              type === 's' ? 'spotify/moveToSpotify' : 'deezer'
+              type === 's' ? 'spotify/moveToSpotify' : 'deezer/moveToDeezer'
             }`,
             { gi },
           );
