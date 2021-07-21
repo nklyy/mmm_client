@@ -2,7 +2,6 @@ import React from 'react';
 
 import AuthButton from '../Button/AuthButton';
 import { v4 as uuid } from 'uuid';
-import axios from 'axios';
 //
 // interface OAuthIn {
 //   provider: string;

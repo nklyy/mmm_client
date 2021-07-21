@@ -48,6 +48,7 @@ export default function ChooseFrom() {
         if (data.error) {
           setErrorMessage(data.error);
           setErrorAl(true);
+          return;
         }
 
         if (move === 'f' && gi) {
@@ -64,16 +65,14 @@ export default function ChooseFrom() {
 
           if (dMusic.status === 200) {
             music = dMusic.data;
-            console.log(dMusic.data);
+
             setDDeezer(type === 'd');
             setDSpotify(type === 's');
+
             setLoading(false);
             setNextStep(true);
           }
         } else if (move === 't' && gi) {
-          setLoading(true);
-          setDDeezer(true);
-          setDSpotify(true);
           const mMusic = await axios.post(
             `http://localhost:4000/v1/${
               type === 's' ? 'spotify/moveToSpotify' : 'deezer/moveToDeezer'
@@ -82,8 +81,10 @@ export default function ChooseFrom() {
           );
 
           if (mMusic.status === 200) {
-            console.log(mMusic);
             setLoading(false);
+            setNextStep(false);
+            setDDeezer(false);
+            setDSpotify(false);
           }
         } else {
           setErrorMessage('Something wrong! Please try again!');
