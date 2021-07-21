@@ -8,6 +8,7 @@ import ChooseWhere from '../ChooseWhere/ChooseWhere';
 
 import { PageContext } from '../../context/PageContext';
 import axios from 'axios';
+import ModalSuccess from '../Modal/ModalSuccess';
 
 const provider = ['deezer', 'spotify'];
 let music: any;
@@ -17,8 +18,9 @@ export default function ChooseFrom() {
     useContext(PageContext);
 
   const [nextStep, setNextStep] = useState(false);
-  const [errMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [errMessage, setErrorMessage] = useState('');
   const [type, setType] = useState<any>('');
   const [move, setMove] = useState<any>('');
   const [gi, setGi] = useState<any>('');
@@ -73,6 +75,10 @@ export default function ChooseFrom() {
             setNextStep(true);
           }
         } else if (move === 't' && gi) {
+          setLoading(true);
+          setDDeezer(true);
+          setDSpotify(true);
+
           const mMusic = await axios.post(
             `http://localhost:4000/v1/${
               type === 's' ? 'spotify/moveToSpotify' : 'deezer/moveToDeezer'
@@ -85,6 +91,7 @@ export default function ChooseFrom() {
             setNextStep(false);
             setDDeezer(false);
             setDSpotify(false);
+            setShowModal(true);
           }
         } else {
           setErrorMessage('Something wrong! Please try again!');
@@ -113,6 +120,8 @@ export default function ChooseFrom() {
       ) : (
         <div>
           {loading ? <Loader /> : false}
+          {showModal ? <ModalSuccess /> : false}
+
           <div className="min-h-screen p-2 flex flex-col justify-center items-center">
             {errorAl ? <ErrorAlert message={errMessage} /> : false}
             <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
