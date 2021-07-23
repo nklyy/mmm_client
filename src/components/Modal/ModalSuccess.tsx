@@ -6,7 +6,6 @@ export default function ModalSuccess() {
   const [hide, setHide] = useState(false);
 
   const handleHide = () => {
-    console.log(12312);
     setHide(true);
   };
 

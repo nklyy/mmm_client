@@ -11,7 +11,7 @@ import axios from 'axios';
 import ModalSuccess from '../Modal/ModalSuccess';
 
 const provider = ['deezer', 'spotify'];
-let music: any;
+// let music: any;
 
 export default function ChooseFrom() {
   const { errorAl, setErrorAl, dDeezer, setDDeezer, dSpotify, setDSpotify } =
@@ -24,6 +24,13 @@ export default function ChooseFrom() {
   const [type, setType] = useState<any>('');
   const [move, setMove] = useState<any>('');
   const [gi, setGi] = useState<any>('');
+  const [lenT, setLenT] = useState(null);
+  // eslint-disable-next-line prefer-const
+  let [countMusic, setCountMusic] = useState(0);
+
+  const addCountMusic = () => {
+    setCountMusic((countMusic += 1));
+  };
 
   useEffect(() => {
     const param = new URLSearchParams(window.location.search);
@@ -66,7 +73,7 @@ export default function ChooseFrom() {
           );
 
           if (dMusic.status === 200) {
-            music = dMusic.data;
+            // music = dMusic.data;
 
             setDDeezer(type === 'd');
             setDSpotify(type === 's');
@@ -75,24 +82,63 @@ export default function ChooseFrom() {
             setNextStep(true);
           }
         } else if (move === 't' && gi) {
-          setLoading(true);
+          // Disable buttons
           setDDeezer(true);
           setDSpotify(true);
 
-          const mMusic = await axios.post(
-            `http://localhost:4000/v1/${
-              type === 's' ? 'spotify/moveToSpotify' : 'deezer/moveToDeezer'
+          // Open WebSocket
+          const s = new WebSocket(
+            `ws://localhost:4000/v1/ws/${
+              type === 's' ? 'spotify/move' : 'deezer/move'
             }`,
-            { gi },
           );
 
-          if (mMusic.status === 200) {
+          s.onopen = () => {
+            console.log('Successful Connected!');
+            s.send(JSON.stringify({ gi }));
+          };
+
+          s.onmessage = (msg) => {
+            // console.log(msg.data);
+            const jsn = JSON.parse(msg.data);
+
+            if (jsn.lenTracks && typeof jsn.lenTracks === 'number') {
+              setLenT(jsn.lenTracks);
+              // Open Loading Screen
+              setLoading(true);
+              console.log(jsn.lenTracks);
+            } else {
+              setErrorAl(true);
+              setErrorMessage('Something wrong! Please try again!');
+            }
+
+            if (jsn.countM) {
+              addCountMusic();
+            }
+          };
+
+          s.onclose = () => {
             setLoading(false);
             setNextStep(false);
             setDDeezer(false);
             setDSpotify(false);
             setShowModal(true);
-          }
+          };
+
+          // const mMusic = await axios.post(
+          //   `http://localhost:4000/v1/${
+          //     type === 's' ? 'spotify/moveToSpotify' : 'deezer/moveToDeezer'
+          //   }`,
+          //   { gi },
+          // );
+          //
+          // if (mMusic.status === 200) {
+          //   setLoading(false);
+          //   setNextStep(false);
+          //   setDDeezer(false);
+          //   setDSpotify(false);
+          //   setShowModal(true);
+          // }
         } else {
           setErrorMessage('Something wrong! Please try again!');
           setErrorAl(true);
@@ -101,6 +147,7 @@ export default function ChooseFrom() {
     }
 
     check();
+    // eslint-disable-next-line
   }, [move, gi, setDDeezer, setDSpotify, setErrorAl, type]);
 
   const buttons = provider.map((pr) => (
@@ -116,10 +163,10 @@ export default function ChooseFrom() {
   return (
     <>
       {nextStep ? (
-        <ChooseWhere uM={music} t={type} gi={gi} />
+        <ChooseWhere t={type} gi={gi} />
       ) : (
         <div>
-          {loading ? <Loader /> : false}
+          {loading ? <Loader c={countMusic} lenT={lenT} m={move} /> : false}
           {showModal ? <ModalSuccess /> : false}
 
           <div className="min-h-screen p-2 flex flex-col justify-center items-center">
