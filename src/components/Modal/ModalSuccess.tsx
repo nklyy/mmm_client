@@ -17,7 +17,7 @@ export default function ModalSuccess() {
           : 'fixed inset-0 w-full h-full z-20 bg-black bg-opacity-50 duration-300 overflow-y-auto min-h-screen p-2 flex flex-col justify-center items-center'
       }
     >
-      <div className="relative w-full sm:w-2/3 md:w-1/2 lg:w-1/2 xl:w-1/4 mx-2 sm:mx-auto mt-10 mb-24 opacity-100">
+      <div className="relative w-5/6 sm:w-2/3 md:w-1/2 lg:w-2/5 xl:w-2/5 mx-2 sm:mx-auto mt-10 mb-24 opacity-100">
         <div className="relative bg-white shadow-lg rounded-lg text-gray-900 z-20">
           <div className="flex flex-col justify-center items-center p-3 text-green-600">
             <div className="flex justify-center w-28 h-28 border-4 border-green-600 rounded-full mb-4">
