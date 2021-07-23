@@ -24,7 +24,7 @@ export default function ChooseFrom() {
   const [type, setType] = useState<any>('');
   const [move, setMove] = useState<any>('');
   const [gi, setGi] = useState<any>('');
-  const [lenT, setLenT] = useState(null);
+  const [lenT, setLenT] = useState('find...');
   // eslint-disable-next-line prefer-const
   let [countMusic, setCountMusic] = useState(0);
 
@@ -82,6 +82,9 @@ export default function ChooseFrom() {
             setNextStep(true);
           }
         } else if (move === 't' && gi) {
+          // Open Loading Screen
+          setLoading(true);
+
           // Disable buttons
           setDDeezer(true);
           setDSpotify(true);
@@ -104,12 +107,7 @@ export default function ChooseFrom() {
 
             if (jsn.lenTracks && typeof jsn.lenTracks === 'number') {
               setLenT(jsn.lenTracks);
-              // Open Loading Screen
-              setLoading(true);
               console.log(jsn.lenTracks);
-            } else {
-              setErrorAl(true);
-              setErrorMessage('Something wrong! Please try again!');
             }
 
             if (jsn.countM) {
