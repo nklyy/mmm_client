@@ -45,17 +45,23 @@ export default function ChooseFrom() {
       window.history.replaceState(null, '', window.location.pathname);
 
       if (gi) {
-        const { data } = await axios.post(
+        const response = await fetch(
           `http://localhost:4000/v1/${
             type === 's' ? 'spotify' : 'deezer'
           }/checkT`,
           {
-            gi,
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ gi }),
           },
         );
 
-        if (data.error) {
-          setErrorMessage(data.error);
+        const jsnData = await response.json();
+
+        if (jsnData.error) {
+          setErrorMessage(jsnData.error);
           setErrorAl(true);
           return;
         }
