@@ -107,7 +107,6 @@ export default function ChooseFrom() {
 
             if (jsn.lenTracks && typeof jsn.lenTracks === 'number') {
               setLenT(jsn.lenTracks);
-              console.log(jsn.lenTracks);
             }
 
             if (jsn.countM) {
@@ -122,21 +121,6 @@ export default function ChooseFrom() {
             setDSpotify(false);
             setShowModal(true);
           };
-
-          // const mMusic = await axios.post(
-          //   `http://localhost:4000/v1/${
-          //     type === 's' ? 'spotify/moveToSpotify' : 'deezer/moveToDeezer'
-          //   }`,
-          //   { gi },
-          // );
-          //
-          // if (mMusic.status === 200) {
-          //   setLoading(false);
-          //   setNextStep(false);
-          //   setDDeezer(false);
-          //   setDSpotify(false);
-          //   setShowModal(true);
-          // }
         } else {
           setErrorMessage('Something wrong! Please try again!');
           setErrorAl(true);
