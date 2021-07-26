@@ -11,6 +11,8 @@ import ModalSuccess from '../Modal/ModalSuccess';
 import ModalNotFound from '../Modal/ModalNotFound';
 
 const provider = ['deezer', 'spotify'];
+const BACKEND_URL = process.env.BACKEND_URL;
+const BACKEND_WS_URL = process.env.BACKEND_WS_URL;
 
 export default function ChooseFrom() {
   const { errorAl, setErrorAl, dDeezer, setDDeezer, dSpotify, setDSpotify } =
@@ -47,9 +49,7 @@ export default function ChooseFrom() {
 
       if (gi) {
         const responseToken = await fetch(
-          `http://localhost:4000/v1/${
-            type === 's' ? 'spotify' : 'deezer'
-          }/checkT`,
+          `${BACKEND_URL}/${type === 's' ? 'spotify' : 'deezer'}/checkT`,
           {
             method: 'POST',
             headers: {
@@ -73,9 +73,7 @@ export default function ChooseFrom() {
           setDSpotify(true);
 
           const responseMusic = await fetch(
-            `http://localhost:4000/v1/${
-              type === 's' ? 'spotify' : 'deezer'
-            }/userMusic`,
+            `${BACKEND_URL}/${type === 's' ? 'spotify' : 'deezer'}/userMusic`,
             {
               method: 'POST',
               headers: {
@@ -110,7 +108,7 @@ export default function ChooseFrom() {
 
           // Open WebSocket
           const s = new WebSocket(
-            `ws://localhost:4000/v1/ws/${
+            `${BACKEND_WS_URL}/${
               type === 's' ? 'spotify/move' : 'deezer/move'
             }`,
           );

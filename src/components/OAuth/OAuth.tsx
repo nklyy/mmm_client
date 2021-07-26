@@ -3,17 +3,17 @@ import React from 'react';
 import AuthButton from '../Button/AuthButton';
 import { v4 as uuid } from 'uuid';
 
+const BACKEND_URL = process.env.BACKEND_URL;
+
 export default function OAuth(props: any) {
   const { provider, moveMusic, dzB, spB, gi } = props;
 
   const handleStartAuth = async () => {
-    console.log(provider, moveMusic, dzB, spB);
-
     if (moveMusic) {
-      window.location.href = `http://localhost:4000/v1/${provider}?m=t&gi=${gi}`;
+      window.location.href = `${BACKEND_URL}/${provider}?m=t&gi=${gi}`;
     } else {
       const guestId = uuid();
-      window.location.href = `http://localhost:4000/v1/${provider}?m=f&gi=${guestId}`;
+      window.location.href = `${BACKEND_URL}/${provider}?m=f&gi=${guestId}`;
     }
   };
 
