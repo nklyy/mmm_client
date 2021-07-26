@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import './Moda.css';
+import './Modal.css';
 
 export default function ModalSuccess() {
   const [hide, setHide] = useState(false);

@@ -7,11 +7,10 @@ import Loader from '../Loader/Loader';
 import ChooseWhere from '../ChooseWhere/ChooseWhere';
 
 import { PageContext } from '../../context/PageContext';
-import axios from 'axios';
 import ModalSuccess from '../Modal/ModalSuccess';
+import ModalNotFound from '../Modal/ModalNotFound';
 
 const provider = ['deezer', 'spotify'];
-// let music: any;
 
 export default function ChooseFrom() {
   const { errorAl, setErrorAl, dDeezer, setDDeezer, dSpotify, setDSpotify } =
@@ -19,7 +18,9 @@ export default function ChooseFrom() {
 
   const [nextStep, setNextStep] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [showModalSuccess, setShowModalSuccess] = useState(false);
+  const [showModalNotFound, setShowModalNotFound] = useState(false);
+  const [notFoundTracks, setNotFoundTracks] = useState({ nF: [] });
   const [errMessage, setErrorMessage] = useState('');
   const [type, setType] = useState<any>('');
   const [move, setMove] = useState<any>('');
@@ -28,8 +29,8 @@ export default function ChooseFrom() {
   // eslint-disable-next-line prefer-const
   let [countMusic, setCountMusic] = useState(0);
 
-  const addCountMusic = () => {
-    setCountMusic((countMusic += 1));
+  const addCountMusic = (c: number) => {
+    setCountMusic((countMusic += c));
   };
 
   useEffect(() => {
@@ -45,7 +46,7 @@ export default function ChooseFrom() {
       window.history.replaceState(null, '', window.location.pathname);
 
       if (gi) {
-        const response = await fetch(
+        const responseToken = await fetch(
           `http://localhost:4000/v1/${
             type === 's' ? 'spotify' : 'deezer'
           }/checkT`,
@@ -58,7 +59,7 @@ export default function ChooseFrom() {
           },
         );
 
-        const jsnData = await response.json();
+        const jsnData = await responseToken.json();
 
         if (jsnData.error) {
           setErrorMessage(jsnData.error);
@@ -71,15 +72,28 @@ export default function ChooseFrom() {
           setDDeezer(true);
           setDSpotify(true);
 
-          const dMusic = await axios.post(
+          const responseMusic = await fetch(
             `http://localhost:4000/v1/${
               type === 's' ? 'spotify' : 'deezer'
             }/userMusic`,
-            { gi },
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ gi }),
+            },
           );
 
+          const dMusic = await responseMusic.json();
+
+          if (dMusic.error) {
+            setErrorMessage(dMusic.error);
+            setErrorAl(true);
+            return;
+          }
+
           if (dMusic.status === 200) {
-            // music = dMusic.data;
 
             setDDeezer(type === 'd');
             setDSpotify(type === 's');
@@ -103,12 +117,10 @@ export default function ChooseFrom() {
           );
 
           s.onopen = () => {
-            console.log('Successful Connected!');
             s.send(JSON.stringify({ gi }));
           };
 
           s.onmessage = (msg) => {
-            // console.log(msg.data);
             const jsn = JSON.parse(msg.data);
 
             if (jsn.lenTracks && typeof jsn.lenTracks === 'number') {
@@ -116,7 +128,11 @@ export default function ChooseFrom() {
             }
 
             if (jsn.countM) {
-              addCountMusic();
+              addCountMusic(jsn.countM);
+            }
+
+            if (jsn.notFoundTracks) {
+              setNotFoundTracks({ nF: jsn.notFoundTracks });
             }
           };
 
@@ -125,7 +141,12 @@ export default function ChooseFrom() {
             setNextStep(false);
             setDDeezer(false);
             setDSpotify(false);
-            setShowModal(true);
+
+            if (notFoundTracks.nF.length > 0) {
+              setShowModalNotFound(true);
+            } else {
+              setShowModalSuccess(true);
+            }
           };
         } else {
           setErrorMessage('Something wrong! Please try again!');
@@ -155,7 +176,12 @@ export default function ChooseFrom() {
       ) : (
         <div>
           {loading ? <Loader c={countMusic} lenT={lenT} m={move} /> : false}
-          {showModal ? <ModalSuccess /> : false}
+          {showModalSuccess ? <ModalSuccess /> : false}
+          {showModalNotFound ? (
+            <ModalNotFound notF={notFoundTracks.nF} />
+          ) : (
+            false
+          )}
 
           <div className="min-h-screen p-2 flex flex-col justify-center items-center">
             {errorAl ? <ErrorAlert message={errMessage} /> : false}
@@ -168,9 +194,3 @@ export default function ChooseFrom() {
     </>
   );
 }
-
-// https://tailwindgrids.com/#/
-// https://appydev.co/submit
-// https://upmostly.com/tutorials/how-to-use-the-usecontext-hook-in-react
-// https://codepen.io/damcclean/pen/GRoRRdR
-// https://tailwindcomponents.com/component/full-page-overlay-loading-screen

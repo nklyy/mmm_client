@@ -5,13 +5,6 @@ import OAuth from '../OAuth/OAuth';
 
 const provider = ['deezer', 'spotify'];
 
-// interface CW {
-//   uM: [any];
-//   t: string;
-//   code: string;
-//   qi: string;
-// }
-
 export default function ChooseWhere(props: any) {
   const buttons = provider.map((pr) => (
     <OAuth

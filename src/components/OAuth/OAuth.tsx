@@ -2,14 +2,6 @@ import React from 'react';
 
 import AuthButton from '../Button/AuthButton';
 import { v4 as uuid } from 'uuid';
-//
-// interface OAuthIn {
-//   provider: string;
-//   moveMusic: boolean;
-//   dzB: boolean;
-//   spB: boolean;
-//   qi: string;
-// }
 
 export default function OAuth(props: any) {
   const { provider, moveMusic, dzB, spB, gi } = props;
