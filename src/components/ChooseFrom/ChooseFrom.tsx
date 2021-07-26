@@ -94,7 +94,6 @@ export default function ChooseFrom() {
           }
 
           if (dMusic.status === 200) {
-
             setDDeezer(type === 'd');
             setDSpotify(type === 's');
 
