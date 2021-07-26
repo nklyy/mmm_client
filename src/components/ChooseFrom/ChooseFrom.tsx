@@ -11,8 +11,8 @@ import ModalSuccess from '../Modal/ModalSuccess';
 import ModalNotFound from '../Modal/ModalNotFound';
 
 const provider = ['deezer', 'spotify'];
-const BACKEND_URL = process.env.BACKEND_URL;
-const BACKEND_WS_URL = process.env.BACKEND_WS_URL;
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_WS_URL = process.env.REACT_APP_BACKEND_WS_URL;
 
 export default function ChooseFrom() {
   const { errorAl, setErrorAl, dDeezer, setDDeezer, dSpotify, setDSpotify } =
@@ -91,7 +91,7 @@ export default function ChooseFrom() {
             return;
           }
 
-          if (dMusic.status === 200) {
+          if (responseMusic.status === 200) {
             setDDeezer(type === 'd');
             setDSpotify(type === 's');
 
