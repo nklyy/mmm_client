@@ -14,7 +14,7 @@ REACT_APP_BACKEND_URL=BackEnd url
 REACT_APP_BACKEND_WS_URL=WebSocket url
 ```
 
-From run app:
+For run app:
 ```bash
 npm run build:css # for build css file
 npm run start # for dev server
