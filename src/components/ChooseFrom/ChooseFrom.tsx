@@ -22,7 +22,7 @@ export default function ChooseFrom() {
   const [loading, setLoading] = useState(false);
   const [showModalSuccess, setShowModalSuccess] = useState(false);
   const [showModalNotFound, setShowModalNotFound] = useState(false);
-  const [notFoundTracks, setNotFoundTracks] = useState({ nF: [] });
+  const [notFoundTracks, setNotFoundTracks] = useState({});
   const [errMessage, setErrorMessage] = useState('');
   const [type, setType] = useState<any>('');
   const [move, setMove] = useState<any>('');
@@ -129,19 +129,21 @@ export default function ChooseFrom() {
             }
 
             if (jsn.notFoundTracks) {
-              setNotFoundTracks({ nF: jsn.notFoundTracks });
-            }
-          };
+              setLoading(false);
+              setNextStep(false);
+              setDDeezer(false);
+              setDSpotify(false);
 
-          s.onclose = () => {
-            setLoading(false);
-            setNextStep(false);
-            setDDeezer(false);
-            setDSpotify(false);
-
-            if (notFoundTracks.nF.length > 0) {
+              setNotFoundTracks(jsn);
               setShowModalNotFound(true);
-            } else {
+            }
+
+            if (jsn.success) {
+              setLoading(false);
+              setNextStep(false);
+              setDDeezer(false);
+              setDSpotify(false);
+
               setShowModalSuccess(true);
             }
           };
@@ -174,11 +176,7 @@ export default function ChooseFrom() {
         <div>
           {loading ? <Loader c={countMusic} lenT={lenT} m={move} /> : false}
           {showModalSuccess ? <ModalSuccess /> : false}
-          {showModalNotFound ? (
-            <ModalNotFound notF={notFoundTracks.nF} />
-          ) : (
-            false
-          )}
+          {showModalNotFound ? <ModalNotFound notF={notFoundTracks} /> : false}
 
           <div className="min-h-screen p-2 flex flex-col justify-center items-center">
             {errorAl ? <ErrorAlert message={errMessage} /> : false}

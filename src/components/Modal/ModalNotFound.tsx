@@ -9,7 +9,7 @@ export default function ModalNotFound(props: any) {
     setHide(true);
   };
 
-  const list = props.notF.map((item: string, idx: number) => (
+  const list = props.notF.notFoundTracks.map((item: string, idx: number) => (
     <li key={idx}>{item}</li>
   ));
 
@@ -44,7 +44,7 @@ export default function ModalNotFound(props: any) {
           </div>
 
           <main>
-            <ul className="m-3">{list}</ul>
+            <ul className="m-3 text-center">{list}</ul>
           </main>
 
           <div className="flex justify-center bg-transparent">
